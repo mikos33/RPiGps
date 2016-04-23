@@ -37,7 +37,7 @@ public class NmeaParser {
     // parsers
     class GPGGA implements SentenceParser {
         public boolean parse(String [] tokens, GpsPosition position) {
-            if(tokens.length>7 && Integer.parseInt(tokens[7])>0) {
+            if(tokens.length>9 && Integer.parseInt(tokens[7])>0) {
                 position.time = Float.parseFloat(tokens[1]);
                 position.lat = Latitude2Decimal(tokens[2], tokens[3]);
                 position.lon = Longitude2Decimal(tokens[4], tokens[5]);
@@ -78,14 +78,18 @@ public class NmeaParser {
 
     class GPVTG implements SentenceParser {
         public boolean parse(String [] tokens, GpsPosition position) {
-            position.dir = Float.parseFloat(tokens[3]);
+            if(fixOK) {
+                position.dir = Float.parseFloat(tokens[3]);
+            }
             return true;
         }
     }
 
     class GPRMZ implements SentenceParser {
         public boolean parse(String [] tokens, GpsPosition position) {
-            position.altitude = Float.parseFloat(tokens[1]);
+            if(fixOK) {
+                position.altitude = Float.parseFloat(tokens[1]);
+            }
             return true;
         }
     }
